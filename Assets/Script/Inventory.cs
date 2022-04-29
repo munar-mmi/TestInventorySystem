@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public List<BaseItem> items;
+    public List<SimpleItem> items;
 
-    public void AddItem(BaseItem item)
+    public void AddItem(SimpleItem item)
     {
-        item.PutToInventory(items);
+        item.AddItem(items);
     }
 
-    public void RemoveItem(BaseItem item)
+    public void RemoveItem(SimpleItem item)
     {
-        item.RemoveItemInInventory(items);
+        item.RemoveItem(items);
     }
 }

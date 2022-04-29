@@ -3,37 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/Stack Item", fileName = "NewStackItem")]
-public class StackItem : BaseItem
+public class StackItem : SimpleItem
 {
-    public int StackCount;
+    public int stackSize;
 
-    public override void PutToInventory(List<BaseItem> items)
+    public override void AddItem(List<SimpleItem> items)
     {
-        while (StackCount > 0)
+        if (items.Contains(this))
         {
-            foreach (StackItem item in items)
-            {
-                if (item.GetType() == GetType() & item.itemName == itemName & item.StackCount < 64)
-                {
-                    item.StackCount += StackCount;
-                    StackCount = 0;
+            RaiseStack();
+        }
+        else
+        {
+            items.Add(this);
+        }
+    }
 
-                    if(item.StackCount > 64)
-                    {
-                        StackCount = item.StackCount % 64;
-                        item.StackCount -= StackCount;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            if (StackCount > 0)
+    public override void RemoveItem(List<SimpleItem> items)
+    {
+        if (items.Contains(this))
+        {
+            ReduceStack();
+            if (stackSize <= 0)
             {
-                items.Add(this);
-            }
-            break;
+                stackSize = 1;
+                items.Remove(this);
             }
         }
+    }
+
+    public void RaiseStack()
+    {
+        stackSize++;
+    }
+
+    public void ReduceStack()
+    {
+        stackSize--;
     }
 }
